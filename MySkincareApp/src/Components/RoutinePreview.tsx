@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useSkincare } from '../contexts/SkincareContext';
+import { useAppSelector } from '../store/hooks';
 
 export default function RoutinePreview() {
-  const { products } = useSkincare();
+  const products = useAppSelector((state) => state.skincare.products);
 
   return (
     <View>

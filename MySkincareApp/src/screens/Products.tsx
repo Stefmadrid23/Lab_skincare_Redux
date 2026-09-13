@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList } from 'react-native';
-import { useSkincare } from '../contexts/SkincareContext';
+import { View, TextInput, Button, FlatList, Text, TouchableOpacity } from 'react-native';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { addProduct } from '../store/slices/skincareSlice';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Products() {
-  const { products, addProduct } = useSkincare();
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.skincare.products);
   const [name, setName] = useState('');
+  const navigation = useNavigation<any>();
 
   return (
     <View>
@@ -12,14 +16,18 @@ export default function Products() {
       <Button
         title="Agregar"
         onPress={() => {
-          addProduct({ name, brand: 'Generico', category: 'General' });
+          dispatch(addProduct({ name, brand: 'Generico', category: 'General' }));
           setName('');
         }}
       />
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}>
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+        )}
       />
     </View>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
-import { SkincareProvider } from './src/contexts/SkincareContext';
+import { Provider } from 'react-redux';
+import { store } from './src/store';
 import AppNavigation from './src/navigation/AppNavigation';
 
 export default function App() {
   return (
-    <SkincareProvider>
+    <Provider store={store}>
       <AppNavigation />
-    </SkincareProvider>
+    </Provider>
   );
 }

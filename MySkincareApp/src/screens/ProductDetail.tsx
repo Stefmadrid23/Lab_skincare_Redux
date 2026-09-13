@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { useSkincare } from '../contexts/SkincareContext';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { addReview, deleteProduct } from '../store/slices/skincareSlice';
 
 export default function ProductDetail({ route }: any) {
   const { productId } = route.params;
-  const { products, deleteProduct, addReview } = useSkincare();
+  const dispatch = useAppDispatch();
+  const products = useAppSelector((state) => state.skincare.products);
   const product = products.find((p) => p.id === productId);
 
   if (!product) return <Text>Producto no encontrado</Text>;
@@ -15,10 +18,10 @@ export default function ProductDetail({ route }: any) {
       <Button
         title="Agregar review"
         onPress={() =>
-          addReview(product.id, { id: Date.now().toString(), rating: 5, comment: 'Excelente' })
+          dispatch(addReview({ productId: product.id, review: { id: Date.now().toString(), rating: 5, comment: 'Excelente' } }))
         }
       />
-      <Button title="Eliminar" onPress={() => deleteProduct(product.id)} />
+      <Button title="Eliminar" onPress={() => dispatch(deleteProduct(product.id))} />
     </View>
   );
 }
